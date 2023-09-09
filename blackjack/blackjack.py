@@ -1,3 +1,4 @@
+from random import shuffle
 class Carta:
 
     def __init__(self):
@@ -24,7 +25,7 @@ class Carta:
 
 class Mano:
 
-    def __int__(self, cartas: tuple = [Carta,Carta]):
+    def __int__(self, cartas: tuple[Carta, Carta]):
         self.mano: list[Carta] = []
         self.mano.extend(cartas)
 
@@ -45,14 +46,26 @@ class Mano:
 
     def destapar(self):
         for carta in self.mano:
-            carta.tapada == False
+            carta.tapada = False
 
 
 
 class Baraja:
 
     def __init__(self):
-        self.baraja : list[Carta] = [Carta(self.valor,self.pinta) for ]
+        self.baraja: list[Carta] = [Carta(valor,pinta) for valor in Carta.valores.keys() for pinta in Carta.pinta]
+
+    def revolver_cartas(self):
+        shuffle(self.baraja)
+
+
+    def repartir_cartas(self, tapada = False):
+        if len(self.baraja) > 0:
+            carta = self.baraja.pop()
+            carta.tapada = tapada
+            return carta
+        else:
+            return None
 
 
 class Jugador:
