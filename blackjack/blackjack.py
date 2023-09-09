@@ -86,7 +86,22 @@ class Jugador:
         return self.fichas > 0
 
 class Casa:
-    pass
+
+
+    def __init__(self):
+        self.mano : Mano
+
+    def  mano_inicial(self, cartas: tuple[Carta, Carta]):
+        self.mano = Mano(cartas)
+    def destapa_carta(self):
+        if  self.mano[0].tapada == True or self.mano[1].tapada == True:
+            self.mano[0].destapar()
+            self.mano[1].destapar()
+
+
+    def recibir_carta(self, carta : Carta):
+        self.mano.añadir_carta(carta)
+
 
 
 class Blackjack:
