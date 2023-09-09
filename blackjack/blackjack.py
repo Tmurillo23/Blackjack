@@ -107,6 +107,49 @@ class Casa:
 class Blackjack:
 
     def __init__(self):
+        self.apuesta : int = 0
         self.jugador: Jugador = None
-        self.cupier: Casa = None
-        self.baraja: Baraja = None
+        self.cupier: Casa = Casa()
+        self.baraja: Baraja = Baraja()
+
+    def registrar_jugador(self,nombre:str):
+        self.jugador = Jugador(100,nombre)
+    def iniciar_juego(self, apuesta : int):
+        self.apuesta = apuesta
+        self.baraja.revolver_cartas()
+
+        carta_1_jugador = self.baraja.repartir_cartas()
+        carta_2_jugador = self.baraja.repartir_cartas()
+        self.jugador.mano_inicial((carta_1_jugador,carta_2_jugador))
+
+        carta_1_casa = self.baraja.repartir_cartas()
+        carta_2_casa = self.baraja.repartir_cartas(tapada=True)
+        self.cupier.mano_inicial((carta_1_casa, carta_2_casa))
+
+    def repartir_carta_jugador(self):
+        self.jugador.recibir_carta(self.baraja.repartir_cartas())
+
+    def destapar_mano_casa(self):
+        self.cupier.mano.destapar()
+
+    def pedir_carta_casa(self):
+        valor_mano_casa = self.cupier.mano.valor_mano()
+        return valor_mano_casa <= self.jugador.mano.valor_mano() and valor_mano_casa <= 16
+
+    def repartir_carta_casa(self):
+        self.cupier.recibir_carta(self.baraja.repartir_cartas())
+
+    def jugador_gano(self) -> bool:
+        valor_mano_jugador = self.jugador.mano.valor_mano()
+        valor_mano_casa = self.cupier.mano.valor_mano()
+        return self.jugador.mano.blackjack() or valor_mano_jugador > valor_mano_casa or valor_mano_casa > 21
+
+    def casa_gano(self) -> bool:
+        valor_mano_jugador = self.jugador.mano.valor_mano()
+        valor_mano_casa = self.cupier.mano.valor_mano()
+        return self.cupier.mano.blackjack() or valor_mano_jugador < valor_mano_casa or valor_mano_jugador > 21
+
+    def empate(self) -> bool:
+        valor_mano_jugador = self.jugador.mano.valor_mano()
+        valor_mano_casa = self.cupier.mano.valor_mano()
+        return valor_mano_casa == valor_mano_jugador
