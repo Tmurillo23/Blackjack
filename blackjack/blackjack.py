@@ -73,10 +73,17 @@ class Jugador:
     def __init__(self, fichas: int, nombre: str):
         self.fichas = fichas
         self.nombre = nombre
+        self.mano: Mano
 
-    def mano_inicial(self, cartas: list[Carta, Carta]):
-        pass
+    def mano_inicial(self, cartas: tuple[Carta, Carta]):
+        self.mano = Mano(cartas)
 
+    def recibir_carta(self, carta : Carta ):
+        self.mano.añadir_carta(carta)
+    def añadir_fichas(self, fichas : int):
+        self.fichas += fichas
+    def hay_fichas(self) -> bool:
+        return self.fichas > 0
 
 class Casa:
     pass
